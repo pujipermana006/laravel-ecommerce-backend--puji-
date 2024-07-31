@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -20,7 +21,6 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer',
             'shipping_cost' => 'required|integer',
             'shipping_service' => 'required|string',
-
         ]);
 
         $user = $request->user();
@@ -41,11 +41,30 @@ class OrderController extends Controller
             'status' => 'pending',
             'total_price' => $totalPrice,
             'grand_total' => $grandTotal,
-
+            'transaction_number' => 'TRX-',
+            time(),
         ]);
 
+        foreach ($request->items as $item) {
+            // $order->items()->create([
+            //     'product_id' => $item['product_id'],
+            //     'price' => $item['price'],
+            //     'quantity' => $item['quantity'],
 
+            // ]);
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+            ]);
+        }
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order created',
+            'data' => $order,
+        ], 201);
     }
 
 }
