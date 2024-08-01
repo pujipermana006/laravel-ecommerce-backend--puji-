@@ -32,7 +32,7 @@ Route::apiResource('/seller/product', App\Http\Controllers\Api\ProductController
 Route::post('/seller/product/{id}', [App\Http\Controllers\Api\ProductController::class, 'update'])->middleware('auth:sanctum');
 
 //address
-Route::apiResource('/buyer/address', App\Http\Controllers\Api\AddressController::class)->middleware('auth:sanctum');
+Route::apiResource('/buyer/addresses', App\Http\Controllers\Api\AddressController::class)->middleware('auth:sanctum');
 
 //order
 Route::post('/buyer/order', [App\Http\Controllers\Api\OrderController::class, 'createOrder'])->middleware('auth:sanctum');

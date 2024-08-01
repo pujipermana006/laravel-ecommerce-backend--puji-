@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -27,7 +28,8 @@ class OrderController extends Controller
 
         $totalPrice = 0;
         foreach ($request->items as $item) {
-            $totalPrice += $item['quantity'] * $item['price'];
+            $product = Product::find($item['product_id']);
+            $totalPrice += $item['quantity'] * $product->price;
         }
 
         $grandTotal = $totalPrice + $request->shipping_cost;
@@ -52,10 +54,11 @@ class OrderController extends Controller
             //     'quantity' => $item['quantity'],
 
             // ]);
+            $product = Product::find($item['product_id']);
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item['product_id'],
-                'price' => $item['price'],
+                'price' => $product->price,
                 'quantity' => $item['quantity'],
             ]);
         }

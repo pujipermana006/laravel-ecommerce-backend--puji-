@@ -30,11 +30,11 @@ class AddressController extends Controller
             'city' => 'required|string',
             'district' => 'required|string',
             'postal_code' => 'required|string',
-            'is_default' => 'requeired|boolean',
+            'is_default' => 'required|boolean',
         ]);
 
         $address = Address::create([
-            'user_id' => $request->user()->id,
+            'users_id' => $request->user()->id,
             'address' => $request->address,
             'country' => $request->country,
             'province' => $request->province,
