@@ -38,7 +38,7 @@ class OrderController extends Controller
             'user_id' => $user->id,
             'address_id' => $request->address_id,
             'seller_id' => $request->seller_id,
-            'shipping_price' => $request->shipping_price,
+            'shipping_price' => $request->shipping_cost,
             'shipping_service' => $request->shipping_service,
             'status' => 'pending',
             'total_price' => $totalPrice,
@@ -69,5 +69,51 @@ class OrderController extends Controller
             'data' => $order,
         ], 201);
     }
+
+    //update shipping nunmber
+    public function updateShippingNumber(Request $request, $id)
+    {
+        $request->validate([
+            'shipping_number' => 'required|string',
+        ]);
+
+        $order = Order::find($id);
+        $order->update([
+            'shipping_number' => $request->shipping_number,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Shipping number updated',
+            'data' => $order,
+        ]);
+    }
+
+    //hiistory order buyer
+    public function historyOrderBuyer(Request $request)
+    {
+        $user = $request->user();
+        $orders = Order::where('user_id', $user->id)->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'List History order buyer',
+            'data' => $orders,
+        ]);
+
+    }
+
+    //history oorder seller
+    public function historyOrderSeller(Request $request)
+    {
+        $user = $request->user();
+        $orders = Order::where('seller_id', $user->id)->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'List History order seller',
+            'data' => $orders,
+        ]);
+    }
+
+
 
 }
